@@ -12,14 +12,15 @@ module.exports = options => {
     let parent_id = headers['span-id'];
     const span_id = ctx.idGenerator(); // 当前节点id
     if (rootEndPoint) {
+      const port = ctx.request.hostname.split(':')[1];
       trace_id = ctx.traceIdGenerator(span_id);
       parent_id = '0';
       tracker.start_endpoint = {
         addrs: {
-          port: ctx.request.hostname,
+          port,
           host: ctx.request.ip,
         }, // request
-        service_name: process.env.POD_NAME, // 通过环境变量获取
+        ...process.env.POD_NAME ? { service_name: process.env.POD_NAME } : null,
       };
     } else {
       if (!trace_id || !parent_id) return; // 非链路采样数据
