@@ -42,9 +42,9 @@ module.exports = options => {
         ctx.logger.error(`[tracker] - request failed, status: ${trackerResp.status}`);
         return;
       }
-      const { errorCode, errorMsg } = trackerResp.data;
-      if (errorCode !== '0') ctx.logger.error(`[tracker] - request failed, code: ${errorCode}, msg: ${errorMsg}`);
-      else ctx.logger.info(`[tracker] - request success, code: ${errorCode}, msg: ${errorMsg}`);
+      const { errorCode, errorInfo } = trackerResp.data;
+      if (errorCode !== 0) ctx.logger.error(`[tracker] - request failed, code: ${errorCode}, msg: ${errorInfo}`);
+      else ctx.logger.info(`[tracker] - request success, code: ${errorCode}, msg: ${errorInfo}`);
     };
     tracker = Object.assign(tracker, {
       DLN,
