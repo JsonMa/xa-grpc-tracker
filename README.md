@@ -12,7 +12,7 @@ $ npm i xa-tracker --save
 
 ```js
 // {app_root}/config/plugin.js
-exports.tracker = {
+exports.xaTracker = {
   enable: true,
   package: 'xa-tracker',
 };
