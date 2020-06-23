@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "extends": "eslint-config-egg",
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "class-methods-use-this": "off",
+    "valid-jsdoc": "error",
+    "require-jsdoc": [
+      "error",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": false
+        }
+      }
+    ],
+    "no-unused-vars": 0,
+    "no-underscore-dangle": "off",
+    "array-bracket-spacing": "off"
+  }
+}

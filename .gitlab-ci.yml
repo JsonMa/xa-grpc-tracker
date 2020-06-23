@@ -1,0 +1,25 @@
+stages:
+  - lint
+  - test
+
+cache:
+  key: "$CI_PROJECT_ID"
+  untracked: true
+  paths:
+    - node_modules/
+
+eslint:
+  tags:
+    - shell
+  stage: lint
+  before_script:
+    - npm install --registry=https://registry.npm.taobao.org
+  script:
+    - npm run lint
+
+test:
+  tags:
+    - shell
+  stage: test
+  script:
+    - npm run test
