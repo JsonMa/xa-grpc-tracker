@@ -36,6 +36,7 @@ module.exports = options => {
       delete data.sendToRemote;
       const trackerResp = await ctx.curl(url, { method: 'POST', contentType: 'json', dataType: 'json', timeout: 6000, data }).catch(err => {
         ctx.logger.error('[tracker] - request failed, error', err);
+        return;
       });
       if (trackerResp.status !== 200) {
         ctx.logger.error(`[tracker] - request failed, status: ${trackerResp.status}`);
