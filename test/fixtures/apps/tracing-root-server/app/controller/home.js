@@ -16,8 +16,6 @@ class HomeController extends Controller {
  * @return {String} - id
  */
   async index() {
-    // this.ctx.tracker.sendToRemote(2);
-    // this.ctx.tracker.sendToRemote(3);
     this.ctx.body = this.ctx.tracker;
   }
 }

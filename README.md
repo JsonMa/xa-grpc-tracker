@@ -23,7 +23,7 @@ exports.xaTracker = {
 ```js
 // {app_root}/config/config.default.js
 exports.xaTracker = {
-  rootEndPoint: true, // 是否为根节点
+  isRootEndPoint: true, // 是否为根节点
   frequency: 1, // 采样间隔，每${frequency}次请求，采样一次
   url: 'http://10.12.31.175:18166/lqm/spanReport', // 链路监控API地址
 };

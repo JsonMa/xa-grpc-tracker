@@ -4,32 +4,33 @@ const assert = require('assert');
 module.exports = options => {
   return async function tracker(ctx, next) {
     let tracker = {}; // 初始化tracker
-    const { isRootEndPoint, url, frequency } = options;
-    if (!ctx.app.trackerCount) ctx.app.trackerCount = 0; // 采样控制
-    const shouldSampling = ++ctx.app.trackerCount === frequency;
-    if (shouldSampling) {
+    const { isRootEndPoint, url, frequency = 1 } = options;
+    const { headers } = ctx;
+    let trace_id = headers['trace-id'];
+    let parent_id = headers['span-id'];
+    const isMiddleEndPoint = !!(trace_id && parent_id);
+    let shouldSampling = false;
+    if (isRootEndPoint) {
+      if (!ctx.app.trackerCount) ctx.app.trackerCount = 0;
+      shouldSampling = ++ctx.app.trackerCount === frequency;
+    }
+    if (isMiddleEndPoint || shouldSampling) {
+      const DLN = ctx.app.config.name.replace(/-/gi, '_');
+      const span_id = ctx.idGenerator();
+      const span_name = `${DLN}_${ctx.spanName()}`;
       const receiveType = isRootEndPoint ? 4 : 1;
       const sendType = isRootEndPoint ? 5 : 0;
-      const { headers } = ctx;
-      ctx.app.trackerCount = 0;
-      const DLN = ctx.app.config.name.replace(/-/gi, '_');
-      let trace_id = headers['trace-id'];
-      let parent_id = headers['span-id'];
-      const port = ctx.request.host.split(':')[1];
       const endPoint = {
         addrs: {
-          port,
+          port: ctx.request.host.split(':')[1],
           host: ctx.request.ip,
         },
         ...process.env.POD_NAME ? { service_name: process.env.POD_NAME.replace(/-/gi, '_') } : null,
       };
-      const span_id = ctx.idGenerator();
-      const span_name = `${DLN}_${ctx.spanName()}`;
-      if (isRootEndPoint) {
+      if (shouldSampling) {
+        ctx.app.trackerCount = 0;
         trace_id = ctx.traceIdGenerator(span_id);
         parent_id = '0';
-      } else {
-        if (!trace_id || !parent_id) return; // 非链路采样数据
       }
       tracker.sendToRemote = async type => {
         assert([0, 1, 2, 3, 4, 5, 6, 7].includes(type), '[tracker] - annotation type error');
