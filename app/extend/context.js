@@ -1,19 +1,17 @@
 'use strict';
 
-const { v1: uuidv1 } = require('uuid');
 const assert = require('assert');
+const Chance = require('chance');
+const chance = new Chance();
 
 module.exports = {
   /**
    * spanId生成函数
    *
-   * @param { Number } count - 调用次数
    * @return {String} - id
    */
-  idGenerator(count = 0) {
-    const idPrefix = uuidv1().split('-').join('');
-    if (count >= 1) return idPrefix;
-    return idPrefix + this.idGenerator(++count);
+  idGenerator() {
+    return chance.string({ pool: '0123456789abcdef', length: 16 });
   },
 
   /**
@@ -26,5 +24,14 @@ module.exports = {
     assert(typeof rootSpanId === 'string', '[tracker] - rootSpanId should be string');
     const traceIdPrefix = this.idGenerator();
     return traceIdPrefix + rootSpanId;
+  },
+
+  /**
+   * spanId生成函数
+   *
+   * @return {String} - span name
+   */
+  spanName() {
+    return chance.string({ length: 16 });
   },
 };

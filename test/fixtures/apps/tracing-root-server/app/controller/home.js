@@ -16,18 +16,8 @@ class HomeController extends Controller {
  * @return {String} - id
  */
   async index() {
-    const curl = () => {
-      return new Promise(resolve => {
-        resolve({
-          data: {
-            errorCode: '0',
-            errorMsg: 'success',
-          },
-        });
-      });
-    };
-    // sinon.replace(this.ctx, 'curl', curl);
-    this.ctx.tracker.sendToRemote(1);
+    // this.ctx.tracker.sendToRemote(2);
+    // this.ctx.tracker.sendToRemote(3);
     this.ctx.body = this.ctx.tracker;
   }
 }

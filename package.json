@@ -1,6 +1,6 @@
 {
   "name": "xa-tracker",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "egg http request tracker",
   "eggPlugin": {
     "name": "xaTracker"
@@ -20,8 +20,7 @@
     "xa-tracing"
   ],
   "dependencies": {
-    "chance": "^1.1.6",
-    "uuid": "^8.1.0"
+    "chance": "^1.1.6"
   },
   "devDependencies": {
     "autod": "^3.0.1",

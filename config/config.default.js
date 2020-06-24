@@ -7,6 +7,7 @@
  * @property {String} SOME_KEY - some description
  */
 exports.xaTracker = {
-  rootEndPoint: true,
-  url: 'http://10.12.31.175:18166/lqm/spanReport',
+  rootEndPoint: true, // 是否为采样根路径
+  frequency: 1, // 采样频率
+  url: 'http://172.20.192.189:18166/lqm/spanReport', // API链路地址
 };
