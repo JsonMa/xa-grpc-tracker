@@ -27,8 +27,6 @@ exports.xaTracker = {
   url: 'http://10.12.31.175:18166/lqm/spanReport', // 链路监控API地址
 };
 
-exports.middleware = ['xaTracker'] // Enable tracker middleware
-
 ```
 
 see [config/config.default.js](config/config.default.js) for more detail.
