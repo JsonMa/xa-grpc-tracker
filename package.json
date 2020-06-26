@@ -1,9 +1,9 @@
 {
-  "name": "xa-tracker",
-  "version": "1.0.5",
-  "description": "egg http request tracker",
+  "name": "xa-grpc-tracker",
+  "version": "1.0.0",
+  "description": "grpc tracker plugin of egg",
   "eggPlugin": {
-    "name": "xaTracker"
+    "name": "xaGrpcTracker"
   },
   "keywords": [
     "egg",
@@ -17,6 +17,8 @@
     "tracer",
     "xa-tracker",
     "xa",
+    "grpc-tracker",
+    "xa-grpc-tracker",
     "xa-tracing"
   ],
   "dependencies": {
@@ -48,6 +50,7 @@
   },
   "files": [
     "app",
+    "lib",
     "config"
   ],
   "ci": {

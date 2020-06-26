@@ -14,7 +14,7 @@ $ npm i xa-tracker --save
 // {app_root}/config/plugin.js
 exports.xaTracker = {
   enable: true,
-  package: 'xa-tracker',
+  package: 'xa-grpc-tracker',
 };
 ```
 
@@ -23,8 +23,7 @@ exports.xaTracker = {
 ```js
 // {app_root}/config/config.default.js
 exports.xaTracker = {
-  isRootEndPoint: true, // 是否为根节点
-  frequency: 1, // 采样间隔，每${frequency}次请求，采样一次
+  port: 50051, // grpc服务监听端口
   url: 'http://10.12.31.175:18166/lqm/spanReport', // 链路监控API地址
 };
 
@@ -42,17 +41,23 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
 /**
- * Get tracker object through ctx, ctx.request or ctx.response.
- *
- * @params {string} tracker.trace_id      - get from http header of trace-id or autoGenerate by plugin if rootEndPoint is true.
- * @params {string} tracker.span_id       - generate by plugin automatically.
- * @params {string} tracker.parent_id     - get from http header of span-id or autoGenerate by plugin if rootEndPoint is true.
+ * Get tracker class through this.ctx.
  * 
  * @memberof HomeController
  */
   async index() {
-    this.ctx.tracker.sendToRemote(1); // 上报链路信息（异步）
-    this.ctx.body = this.ctx.tracker;
+    const mockGrpcCall = {
+      request: {
+        trace_id: chance.string({ length: 32 }),
+        span_id: chance.string({ length: 16 }),
+      },
+    };
+    const { xaGrpcTracker } = this.ctx;
+    const tracker = new xaGrpcTracker(this.ctx, mockGrpcCall);
+    tracker.sendToRemote(2); // 接收到请求后上报链路信息
+    // some async calls...
+    tracker.sendToRemote(3); // 处理完请求后上报链路信息
+    this.ctx.body = tracker.trackerParams;
   }
 }
 

@@ -4,19 +4,18 @@ const mock = require('egg-mock');
 const assert = require('assert');
 const process = require('process');
 
-describe('test/tracing.root_server.test.js', () => {
+describe('test/tracker.grpc.server.test.js', () => {
   let app;
-  let ctx;
   before(() => {
     app = mock.app({
-      baseDir: 'apps/tracing-root-server',
+      baseDir: 'apps/tracker-grpc-server',
     });
     return app.ready();
   });
 
   beforeEach(() => {
-    ctx = app.createAnonymousContext();
     if (!process.env.POD_NAME) process.env.POD_NAME = `${app.config.name}`;
+    if (!process.env.POD_IP) process.env.POD_IP = '192.18.3.165';
   });
 
   after(() => app.close());
