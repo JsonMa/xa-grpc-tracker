@@ -1,6 +1,6 @@
 {
   "name": "xa-grpc-tracker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "grpc tracker plugin of egg",
   "eggPlugin": {
     "name": "xaGrpcTracker"
