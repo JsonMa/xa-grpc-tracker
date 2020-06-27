@@ -18,12 +18,14 @@ class HomeController extends Controller {
   async index() {
     const mockGrpcCall = {
       request: {
+        dln: 'test-dln',
         trace_id: chance.string({ length: 32 }),
         span_id: chance.string({ length: 16 }),
       },
     };
     const { xaGrpcTracker } = this.ctx;
-    const tracker = new xaGrpcTracker(this.ctx, mockGrpcCall);
+    const spanName = 'test-span-name';
+    const tracker = new xaGrpcTracker(this.ctx, spanName, mockGrpcCall);
     tracker.sendToRemote(2);
     // some async calls...
     tracker.sendToRemote(3);

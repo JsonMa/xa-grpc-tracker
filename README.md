@@ -23,6 +23,7 @@ exports.xaTracker = {
 ```js
 // {app_root}/config/config.default.js
 exports.xaTracker = {
+  debug: false, // 是否开启debug日志
   port: 50051, // grpc服务监听端口
   url: 'http://10.12.31.175:18166/lqm/spanReport', // 链路监控API地址
 };
