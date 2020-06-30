@@ -16,20 +16,28 @@ class HomeController extends Controller {
  * @return {String} - id
  */
   async index() {
-    const mockGrpcCall = {
-      request: {
-        dln: 'test-dln',
-        trace_id: chance.string({ length: 32 }),
-        span_id: chance.string({ length: 16 }),
-      },
+    const mockGrpcRequest = {
+      dln: 'grpc-dln',
+      span_name: 'server_span_name',
+      span_id: chance.string({ length: 16 }),
+      parent_id: chance.string({ length: 16 }),
+      trace_id: chance.string({ length: 32 }),
     };
     const { xaGrpcTracker } = this.ctx;
-    const spanName = 'test-span-name';
-    const tracker = new xaGrpcTracker(this.ctx, spanName, mockGrpcCall);
-    tracker.sendToRemote(2);
+    const trackerServer = new xaGrpcTracker(this.ctx, mockGrpcRequest);
+
+    const span_name = 'client_span_name';
+    const { dln, span_id: parent_id, trace_id } = trackerServer.trackerParams;
+    const trackerClient = new xaGrpcTracker(this.ctx, { dln, span_name, parent_id, trace_id });
+
+    trackerServer.sendToRemote(1);
     // some async calls...
-    tracker.sendToRemote(3);
-    this.ctx.body = tracker.trackerParams;
+    trackerClient.sendToRemote(3);
+    // some sync calls...
+    trackerClient.sendToRemote(2);
+    // some sync calls...
+    trackerServer.sendToRemote(0);
+    this.ctx.body = trackerServer.trackerParams;
   }
 }
 

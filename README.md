@@ -12,7 +12,7 @@ $ npm i xa-tracker --save
 
 ```js
 // {app_root}/config/plugin.js
-exports.xaTracker = {
+exports.xaGrpcTracker = {
   enable: true,
   package: 'xa-grpc-tracker',
 };
@@ -22,7 +22,7 @@ exports.xaTracker = {
 
 ```js
 // {app_root}/config/config.default.js
-exports.xaTracker = {
+exports.xaGrpcTracker = {
   debug: false, // 是否开启debug日志
   port: 50051, // grpc服务监听端口
   url: 'http://10.12.31.175:18166/lqm/spanReport', // 链路监控API地址
@@ -45,20 +45,28 @@ class HomeController extends Controller {
  * @memberof HomeController
  */
   async index() {
-    const mockGrpcCall = {
-      request: {
-        dln: 'test-dln',
-        trace_id: chance.string({ length: 32 }),
-        span_id: chance.string({ length: 16 }),
-      },
+    const mockGrpcRequest = {
+      dln: 'grpc-dln',
+      span_name: 'server_span_name',
+      span_id: chance.string({ length: 16 }),
+      parent_id: chance.string({ length: 16 }),
+      trace_id: chance.string({ length: 32 }),
     };
     const { xaGrpcTracker } = this.ctx;
-    const spanName = 'test-span-name';
-    const tracker = new xaGrpcTracker(this.ctx, spanName, mockGrpcCall);
-    tracker.sendToRemote(2); // 接收到请求后上报链路信息
+    const trackerServer = new xaGrpcTracker(this.ctx, mockGrpcRequest);
+
+    const span_name = 'client_span_name';
+    const { dln, span_id: parent_id, trace_id } = trackerServer.trackerParams;
+    const trackerClient = new xaGrpcTracker(this.ctx, { dln, span_name, parent_id, trace_id });
+
+    trackerServer.sendToRemote(1);
     // some async calls...
-    tracker.sendToRemote(3); // 处理完请求后上报链路信息
-    this.ctx.body = tracker.trackerParams;
+    trackerClient.sendToRemote(3);
+    // some sync calls...
+    trackerClient.sendToRemote(2);
+    // some sync calls...
+    trackerServer.sendToRemote(0);
+    this.ctx.body = trackerServer.trackerParams;
   }
 }
 
