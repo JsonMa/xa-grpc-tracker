@@ -1,11 +1,11 @@
-# egg-tracker
+# xa-grpc-tracker
 
-  Eggjs tracker plugin which can generate a new tracker object for each **ctx, ctx.request and ctx.response** instance automatically.
+  xa grpc tracker plugin which can generate a new tracker object for each **ctx, ctx.request and ctx.response** instance automatically.
 
 ## Install
 
 ```bash
-$ npm i xa-tracker --save
+$ npm i xa-grpc-tracker --save
 ```
 
 ## Usage
